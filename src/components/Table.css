@@ -1,0 +1,33 @@
+.table {
+    margin-top: 20px;
+    overflow: scroll;
+    height: 400px;
+    background-color: ivory;
+    color: rgb(110, 111, 112);
+}
+
+.table tr {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 15px;
+}
+
+.table td {
+    padding: 0.5rem;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+  }
+
+::-webkit-scrollbar-track {
+    background: ivory;
+  }
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
