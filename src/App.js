@@ -5,12 +5,16 @@ import InfoBox from './components/InfoBox'
 import Map from './components/Map'
 import Table from './components/Table'
 import LineGraph from './components/LineGraph'
+import 'leaflet/dist/leaflet.css'
 
 function App() {
   const [countries, setCountries] = useState([])
   const [country, setCountry] = useState('worldwide')
   const [countryInfo, setCountryInfo] = useState({})
   const [tableData, setTableData] = useState([])
+  const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 })
+  const [mapZoom, setMapZoom] = useState(3)
+  const [mapCountries, setMapCountries] = useState([])
 
   useEffect(() => {
     fetch('https://disease.sh/v3/covid-19/all')
@@ -47,6 +51,7 @@ function App() {
           ))
           const sortedData = sortData(data)
           setTableData(sortedData)
+          setMapCountries(data)
           setCountries(countries)
         })
     }
@@ -65,6 +70,12 @@ function App() {
       .then(data => {
         setCountry(countryCode)
         setCountryInfo(data)
+
+        countryCode === "worldwide"
+          ? setMapCenter([34.80746, -40.4796])
+          : setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        setMapZoom(countryCode === "worldwide" ? 2.5 : 4);
+
       })
   }
 
@@ -97,14 +108,17 @@ function App() {
           <InfoBox title='COVID-19 Deaths' cases={countryInfo.todayDeaths} total={countryInfo.deaths} />
         </div>
 
-        <Map />
+        <Map
+          countries={mapCountries}
+          center={mapCenter}
+          zoom={mapZoom}
+        />
       </div>
 
       <Card className='app_rightSide'>
-        <CardContent className='app__cardContent'>
-          <h3>Most Positive Cases by Country</h3>
+        <CardContent className='app_cc'>
+          <h3>Most Cases by Country</h3>
           <Table countries={tableData} />
-          {/* Graph */}
           <h3>Worldwide New Cases</h3>
           <LineGraph />
           <div className='learnMoreDiv'>

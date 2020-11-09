@@ -46,7 +46,7 @@ const options = {
   }
 }
 
-const buildChartData = (data, casesType='cases') => {
+const buildChartData = (data, casesType = 'cases') => {
   let chartData = []
   let lastDataPoint
   for (let date in data.cases) {
@@ -67,7 +67,7 @@ function LineGraph() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=120")
+      await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=90")
         .then((response) => {
           return response.json()
         })
@@ -89,7 +89,7 @@ function LineGraph() {
             datasets: [
               {
                 backgroundColor: "rgba(204, 16, 52, 0.5)",
-                borderColor: "#CC1034",
+                borderColor: "rgba(255, 70, 30, 0.8)",
                 data: data
               }
             ]
