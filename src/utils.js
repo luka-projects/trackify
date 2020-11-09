@@ -29,16 +29,16 @@ export const showData = (data, casesType = 'cases') => (
         >
 
             <Popup>
-                <div className='info__container'>
-                    <div className='info__flag' style={{ backgroundImage: `url(${country.countryInfo.flag})` }}></div>
-                    <div className='info__name'>{country.country}</div>
-                    <div className='info__cases'>
+                <div className='popup__container'>
+                    <div className='popup__flag' style={{ backgroundImage: `url(${country.countryInfo.flag})` }}></div>
+                    <div className='popup__name'>{country.country}</div>
+                    <div className='popup__cases'>
                         Cases: {numeral(country.cases).format('0,0')}
                     </div>
-                    <div className='info__recoveries'>
+                    <div className='popup__recoveries'>
                         Recoveries: {numeral(country.recovered).format('0,0')}
                     </div>
-                    <div className='info__deaths'>
+                    <div className='popup__deaths'>
                         Deaths: {numeral(country.deaths).format('0,0')}
                     </div>
                 </div>

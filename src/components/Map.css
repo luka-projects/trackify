@@ -10,3 +10,33 @@
 .map .leaflet-container {
     height: 100%;
 }
+
+.popup__container {
+    width: 150px;
+}
+
+.popup__flag {
+    width: 100%;
+    height:80px;
+    background-size: cover;
+    border-radius: 7px;
+    margin-bottom: 5px;
+}
+
+.popup__flag img {
+    width: 100px;
+    border-radius: 5px;
+}
+
+.popup__name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+  }
+
+.popup__cases,
+.popup__recoveries,
+.popup__deaths {
+    margin-top: 5px;
+    font-size: 16px;
+}
