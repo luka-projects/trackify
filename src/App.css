@@ -10,7 +10,16 @@ body {
     display: flex;
     justify-content: space-evenly;
     padding: 20px;
+    background-color: #ddcbcb;
 }
+
+.app_graph {
+    flex-grow: 1;
+}
+
+.app__dropmenu {
+    background-color: white;
+  }
 
 .app__leftSide {
     flex: 0.9;
@@ -35,10 +44,18 @@ body {
     justify-content: space-between;
 }
 
+.app__header h1 {
+    font-size: 35px;
+}
+
 .app__stats {
     display: flex;
     justify-content: space-between;
 }
+
+.app__cc > h3:last-of-type {
+    margin-top: 1rem;
+  }
 
 @media (max-width: 990px) {
     .app {
