@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import './App.css';
-import { FormControl, Select, MenuItem, Card, CardContent } from '@material-ui/core'
+import './App.css'
+import { FormControl, Select, MenuItem, Card, CardContent, Button } from '@material-ui/core'
 import InfoBox from './components/InfoBox'
 import Map from './components/Map'
 import Table from './components/Table'
@@ -101,18 +101,30 @@ function App() {
       </div>
 
       <Card className='app_rightSide'>
-        <CardContent>
+        <CardContent className='app__cardContent'>
           <h3>Most Positive Cases by Country</h3>
           <Table countries={tableData} />
           {/* Graph */}
           <h3>Worldwide New Cases</h3>
           <LineGraph />
+          <div className='learnMoreDiv'>
+            <h5>Get the latest info from the WHO about COVID-19</h5>
+            <Button
+              href='https://www.who.int/emergencies/diseases/novel-coronavirus-2019'
+              color="primary"
+              variant="outlined"
+              size="small"
+              target="_blank"
+            >
+              Learn More
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
 
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
