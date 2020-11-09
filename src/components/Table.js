@@ -5,7 +5,7 @@ function Table({ countries }) {
     return (
         <div className='table'>
             {countries.map(country => (
-                <tr>
+                <tr key={country.countryInfo._id}>
                     <td>{country.country}</td>
                     <td><strong>{country.cases}</strong></td>
                 </tr>
