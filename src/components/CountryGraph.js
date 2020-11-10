@@ -46,7 +46,7 @@ const options = {
   }
 }
 
-const buildChartData = (data, casesType = 'cases') => {
+ export const buildChartData = (data, casesType = 'cases') => {
   let chartData = []
   let lastDataPoint
   for (let date in data.cases) {
