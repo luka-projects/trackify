@@ -8,7 +8,6 @@ import LineGraph from './components/LineGraph'
 import { prettify } from './utils'
 import 'leaflet/dist/leaflet.css'
 import numeral from 'numeral'
-import CountryGraph from './components/CountryGraph'
 
 function App() {
   const [countries, setCountries] = useState([])
@@ -20,6 +19,8 @@ function App() {
   const [mapCountries, setMapCountries] = useState([])
   const [casesType, setCasesType] = useState('cases')
   const [historyData, setHistoryData] = useState({})
+
+  
 
   useEffect(() => {
     fetch('https://disease.sh/v3/covid-19/all')
@@ -46,7 +47,13 @@ function App() {
     const getData = async () => {
       await fetch('https://disease.sh/v3/covid-19/countries')
         .then((res) => res.json())
-        .then((data) => {
+        .then((orig) => {
+          const passed = []
+          const data = orig.filter(el => {
+            if (passed.includes(el.key)) return false
+            passed.push(el.key)
+            return true
+          })
           const countries = data.map((country) => (
             {
               name: country.country, //Serbia
