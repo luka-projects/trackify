@@ -19,6 +19,7 @@ function App() {
   const [mapZoom, setMapZoom] = useState(3)
   const [mapCountries, setMapCountries] = useState([])
   const [casesType, setCasesType] = useState('cases')
+  const [historyData, setHistoryData] = useState({})
 
   useEffect(() => {
     fetch('https://disease.sh/v3/covid-19/all')
@@ -63,7 +64,23 @@ function App() {
     getData()
   }, [])
 
-  const onCountryChange = async (event) => {
+  const buildChartData = (data, casesType = 'cases') => {
+    let chartData = []
+    let lastDataPoint
+    for (let date in data.cases) {
+      if (lastDataPoint) {
+        let newDataPoint = {
+          x: date,
+          y: data[casesType][date] - lastDataPoint
+        }
+        chartData.push(newDataPoint)
+      }
+      lastDataPoint = data[casesType][date]
+    }
+    return chartData
+  }
+
+  const onCountryChange = async (event, casesType = 'cases') => {
     const countryCode = event.target.value
     setCountry(countryCode)
 
@@ -79,16 +96,23 @@ function App() {
           ? setMapCenter([34.80746, -40.4796])
           : setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
         setMapZoom(countryCode === "worldwide" ? 2.5 : 4);
-        
-      })
-      //za individualne drzave(nov graph ubacaiti)
-      const histoUrl = `https://disease.sh/v3/covid-19/historical/${countryCode}?lastdays=60`
 
-      await fetch(histoUrl)
-      .then((res) => res.json())
-      .then(data => {
-        console.log(data)
       })
+    //za individualne drzave(nov graph ubacaiti)
+    const histoUrl = `https://disease.sh/v3/covid-19/historical/${countryCode}?lastdays=60`
+
+    const fetchData = async () => {
+      await fetch(histoUrl)
+        .then((res) => res.json())
+        .then(data => {
+          let chartData = buildChartData(data, casesType)
+          setHistoryData(chartData)
+          console.log(data)
+        })
+    }
+
+    fetchData()
+
 
 
   }
@@ -141,7 +165,7 @@ function App() {
             cases={prettify(countryInfo.todayDeaths)}
             total={numeral(countryInfo.deaths).format('0.0a')}
           />
-          
+
         </div>
 
         <Map
