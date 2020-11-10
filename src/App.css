@@ -10,22 +10,22 @@ body {
     display: flex;
     justify-content: space-evenly;
     padding: 20px;
-    background-color: #ddcbcb;
-}
-
-.app_graph {
-    flex-grow: 1;
+    background-color: #eee2e2;
 }
 
 .app__dropmenu {
     background-color: white;
-  }
+}
 
 .app__leftSide {
     flex: 0.9;
 }
 
-.app_cc > h3 {
+.app__graphs {
+    display: block;
+}
+
+.app_cc>h3 {
     margin-bottom: 25px;
 }
 
@@ -33,7 +33,7 @@ body {
     margin-top: 20px;
 }
 
-.learnMoreDiv > h5 {
+.learnMoreDiv>h5 {
     padding-bottom: 17px;
 }
 
@@ -45,7 +45,10 @@ body {
 }
 
 .app__header h1 {
+    width: 350px;
     font-size: 35px;
+    padding: 9px;
+    border-bottom: 3px solid black;
 }
 
 .app__stats {
@@ -53,9 +56,9 @@ body {
     justify-content: space-between;
 }
 
-.app__cc > h3:last-of-type {
+.app__cc>h3:last-of-type {
     margin-top: 1rem;
-  }
+}
 
 @media (max-width: 990px) {
     .app {

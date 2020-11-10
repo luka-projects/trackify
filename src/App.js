@@ -8,6 +8,7 @@ import LineGraph from './components/LineGraph'
 import { prettify } from './utils'
 import 'leaflet/dist/leaflet.css'
 import numeral from 'numeral'
+import CountryGraph from './components/CountryGraph'
 
 function App() {
   const [countries, setCountries] = useState([])
@@ -78,9 +79,20 @@ function App() {
           ? setMapCenter([34.80746, -40.4796])
           : setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
         setMapZoom(countryCode === "worldwide" ? 2.5 : 4);
-
+        
       })
+      //za individualne drzave(nov graph ubacaiti)
+      const histoUrl = `https://disease.sh/v3/covid-19/historical/${countryCode}?lastdays=60`
+
+      await fetch(histoUrl)
+      .then((res) => res.json())
+      .then(data => {
+        console.log(data)
+      })
+
+
   }
+
 
   return (
     <div className="app">
@@ -129,6 +141,7 @@ function App() {
             cases={prettify(countryInfo.todayDeaths)}
             total={numeral(countryInfo.deaths).format('0.0a')}
           />
+          
         </div>
 
         <Map
@@ -137,28 +150,34 @@ function App() {
           center={mapCenter}
           zoom={mapZoom}
         />
+
+        {/* <div className='app__graphs'>
+          <CountryGraph />
+        </div> */}
       </div>
 
-      <Card className='app_rightSide'>
-        <CardContent className='app_cc'>
-          <h3>Most Cases by Country</h3>
-          <Table countries={tableData} />
-          <h3>Worldwide New {casesType}</h3>
-          <LineGraph casesType={casesType} />
-          <div className='learnMoreDiv'>
-            <h5>Get the latest info from the WHO about COVID-19</h5>
-            <Button
-              href='https://www.who.int/emergencies/diseases/novel-coronavirus-2019'
-              color="primary"
-              variant="outlined"
-              size="small"
-              target="_blank"
-            >
-              Learn More
+      <div className='app_rightSide'>
+        <Card >
+          <CardContent className='app_cc'>
+            <h3>Most Cases by Country</h3>
+            <Table countries={tableData} />
+            <h3>Worldwide New {casesType}</h3>
+            <LineGraph casesType={casesType} />
+            <div className='learnMoreDiv'>
+              <h5>Get the latest info from the WHO about COVID-19</h5>
+              <Button
+                href='https://www.who.int/emergencies/diseases/novel-coronavirus-2019'
+                color="primary"
+                variant="outlined"
+                size="small"
+                target="_blank"
+              >
+                Learn More
             </Button>
-          </div>
-        </CardContent>
-      </Card>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
 
     </div>
