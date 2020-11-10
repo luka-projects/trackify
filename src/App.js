@@ -50,8 +50,8 @@ function App() {
         .then((orig) => {
           const passed = []
           const data = orig.filter(el => {
-            if (passed.includes(el.key)) return false
-            passed.push(el.key)
+            if (passed.includes(el.countryInfo._id)) return false
+            passed.push(el.countryInfo._id)
             return true
           })
           const countries = data.map((country) => (
@@ -130,7 +130,7 @@ function App() {
         .then(data => {
           let chartData = buildChartData(data, casesType)
           setHistoryData(chartData)
-          console.log(chartData)
+          //console.log(chartData)
           //console.log(data)
         })
     }
