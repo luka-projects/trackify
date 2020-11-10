@@ -124,6 +124,7 @@ function App() {
           let chartData = buildChartData(data, casesType)
           setHistoryData(chartData)
           console.log(chartData)
+          //console.log(data)
         })
     }
 
