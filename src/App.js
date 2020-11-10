@@ -8,7 +8,6 @@ import LineGraph from './components/LineGraph'
 import { prettify } from './utils'
 import 'leaflet/dist/leaflet.css'
 import numeral from 'numeral'
-import CountryGraph from './components/CountryGraph'
 
 function App() {
   const [countries, setCountries] = useState([])
@@ -19,6 +18,9 @@ function App() {
   const [mapZoom, setMapZoom] = useState(3)
   const [mapCountries, setMapCountries] = useState([])
   const [casesType, setCasesType] = useState('cases')
+  const [historyData, setHistoryData] = useState({})
+
+  
 
   useEffect(() => {
     fetch('https://disease.sh/v3/covid-19/all')
@@ -45,7 +47,13 @@ function App() {
     const getData = async () => {
       await fetch('https://disease.sh/v3/covid-19/countries')
         .then((res) => res.json())
-        .then((data) => {
+        .then((orig) => {
+          const passed = []
+          const data = orig.filter(el => {
+            if (passed.includes(el.countryInfo._id)) return false
+            passed.push(el.countryInfo._id)
+            return true
+          })
           const countries = data.map((country) => (
             {
               name: country.country, //Serbia
@@ -63,11 +71,43 @@ function App() {
     getData()
   }, [])
 
-  const onCountryChange = async (event) => {
+
+
+  const onCountryChange = async (event, casesType = 'cases') => {
     const countryCode = event.target.value
     setCountry(countryCode)
 
     const url = countryCode === 'worldwide' ? 'https://disease.sh/v3/covid-19/all' : `https://disease.sh/v3/covid-19/countries/${countryCode}`
+
+    const buildChartData = (data, casesType = 'cases') => {
+      let chartData = []
+      let lastDataPoint
+      for (let date in data.cases) {
+        if (lastDataPoint) {
+          let newDataPoint = {
+            country: countryCode,
+            province: ['mainland'],
+            timeline: {
+              cases: {
+                x: date,
+                y: data[casesType][date] - lastDataPoint
+              },
+              deaths: {
+                x: date,
+                y: data[casesType][date] - lastDataPoint
+              },
+              recovered: {
+                x: date,
+                y: data[casesType][date] - lastDataPoint
+              }
+            },
+          }
+          chartData.push(newDataPoint)
+        }
+        lastDataPoint = data[casesType][date]
+      }
+      return chartData
+    }
 
     await fetch(url)
       .then((res) => res.json())
@@ -79,16 +119,24 @@ function App() {
           ? setMapCenter([34.80746, -40.4796])
           : setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
         setMapZoom(countryCode === "worldwide" ? 2.5 : 4);
-        
-      })
-      //za individualne drzave(nov graph ubacaiti)
-      const histoUrl = `https://disease.sh/v3/covid-19/historical/${countryCode}?lastdays=60`
 
-      await fetch(histoUrl)
-      .then((res) => res.json())
-      .then(data => {
-        console.log(data)
       })
+    //za individualne drzave(nov graph ubacaiti)
+    const histoUrl = `https://disease.sh/v3/covid-19/historical/${countryCode}?lastdays=60`
+
+    const fetchData = async () => {
+      await fetch(histoUrl)
+        .then((res) => res.json())
+        .then(data => {
+          let chartData = buildChartData(data, casesType)
+          setHistoryData(chartData)
+          //console.log(chartData)
+          //console.log(data)
+        })
+    }
+
+    fetchData()
+
 
 
   }
@@ -141,7 +189,7 @@ function App() {
             cases={prettify(countryInfo.todayDeaths)}
             total={numeral(countryInfo.deaths).format('0.0a')}
           />
-          
+
         </div>
 
         <Map
