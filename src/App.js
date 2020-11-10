@@ -64,27 +64,43 @@ function App() {
     getData()
   }, [])
 
-  const buildChartData = (data, casesType = 'cases') => {
-    let chartData = []
-    let lastDataPoint
-    for (let date in data.cases) {
-      if (lastDataPoint) {
-        let newDataPoint = {
-          x: date,
-          y: data[casesType][date] - lastDataPoint
-        }
-        chartData.push(newDataPoint)
-      }
-      lastDataPoint = data[casesType][date]
-    }
-    return chartData
-  }
+
 
   const onCountryChange = async (event, casesType = 'cases') => {
     const countryCode = event.target.value
     setCountry(countryCode)
 
     const url = countryCode === 'worldwide' ? 'https://disease.sh/v3/covid-19/all' : `https://disease.sh/v3/covid-19/countries/${countryCode}`
+
+    const buildChartData = (data, casesType = 'cases') => {
+      let chartData = []
+      let lastDataPoint
+      for (let date in data.cases) {
+        if (lastDataPoint) {
+          let newDataPoint = {
+            country: countryCode,
+            province: ['mainland'],
+            timeline: {
+              cases: {
+                x: date,
+                y: data[casesType][date] - lastDataPoint
+              },
+              deaths: {
+                x: date,
+                y: data[casesType][date] - lastDataPoint
+              },
+              recovered: {
+                x: date,
+                y: data[casesType][date] - lastDataPoint
+              }
+            },
+          }
+          chartData.push(newDataPoint)
+        }
+        lastDataPoint = data[casesType][date]
+      }
+      return chartData
+    }
 
     await fetch(url)
       .then((res) => res.json())
@@ -107,7 +123,7 @@ function App() {
         .then(data => {
           let chartData = buildChartData(data, casesType)
           setHistoryData(chartData)
-          console.log(data)
+          console.log(chartData)
         })
     }
 
